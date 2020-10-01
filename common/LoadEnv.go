@@ -1,6 +1,7 @@
 package common
 
 import (
+	"flag"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
@@ -14,8 +15,21 @@ func LoadEnv() {
 
 	rootPath := re.Find([]byte(cwd))
 
-	err := godotenv.Load(string(rootPath) + `/.env`)
-	if err != nil {
-		log.Fatal("Problem loading .env file")
+	if flag.Lookup("test.v") == nil {
+		err := godotenv.Load(string(rootPath) + `/.env`)
+
+		if err != nil {
+			log.Fatal("Problem loading .env file")
+		}
+
+	} else {
+		err := godotenv.Load(string(rootPath) + `/.env.test`)
+
+		if err != nil {
+			log.Fatal("Problem loading .env.test file")
+		}
 	}
+
+
+
 }

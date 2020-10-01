@@ -87,7 +87,7 @@ RABBITMQ_PORT=5672
 AGGREGATION_AVG_INTERVAL_TIME=2
 AGGREGATION_MAX_INTERVAL_TIME=1
 ```
-
+You can specify different settings for test environment in .env.test file.  
 
 ### Build
 To build project run:
