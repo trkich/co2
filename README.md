@@ -7,7 +7,7 @@ Service have 3 microservices:
 - Processors - Processing measurements and storing them to MySQL
 - Aggregator - Running in background and calculating Max and Avg for each sensor
 
-In this way Service can be scaled both horizontally and vertically as show on following diagram:
+In this way Service can be scaled both horizontally and vertically as shown on following diagram:
 
 ```bash
                              +----------------------------------------------------+
@@ -43,7 +43,8 @@ POST /api/v1/sensors/{uuid}/measurements
 2. Get sensor max and average measurements:
 ```bash
 GET /api/v1/sensors/{uuid}/metrics
-Response: {
+Response: 
+{
     "maxLast30Days" : 1200,
     "avgLast30Days" : 900
 }
@@ -51,8 +52,9 @@ Response: {
 
 2. Obtain sensor status:
 ```bash
-POST /api/v1/sensors/{uuid}/measurements
-Response: {
+GET /api/v1/sensors/{uuid}
+Response: 
+{
     "status" : "OK" // Possible status OK,WARN,ALERT
 }
 ```
@@ -130,5 +132,25 @@ make test
 - Improve logging
 - Dockerization
 - Add support for Minikube
-- Create new microservice for managing status
-- Create new microservice for handling MySQL queries (Move communication over RabbitMQ)
+- Change architecture from Shared DB to DB per Service pattern as shown on following diagram:
+
+```bash
+                                     +--------------+       +-------------------+
+                                     |              |       |                   |
+                       +------------->    Status    <------->     Status DB     |
+                       |             |              |       |                   |
+                       |             +--------------+       +-------------------+
+                       |
++----------+     +-----v----+        +--------------+       +-------------------+
+|          |     |          |        |              |       |                   |
+|  API GW  <-----> RabbitMQ <--------> Measurements +------->  Measurements DB  |
+|          |     |          |        |              |       |                   |
++----------+     +-----^----+        +--------------+       +-------------------+
+                       |
+                       |             +--------------+       +-------------------+
+                       |             |              |       |                   |
+                       +------------->   Metrics    <------->    Metrics DB     |
+                                     |              |       |                   |
+                                     +--------------+       +-------------------+
+
+```
