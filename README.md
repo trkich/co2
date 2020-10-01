@@ -72,6 +72,8 @@ If you do not have it installed, you can follow official instructions to install
 https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/
 https://www.rabbitmq.com/#getstarted
 
+You do not need to create tables in MySQL, service will automatically migrate tables, just make sure that database provided in config exists in MySQL.
+
 Make sure to change configuration in .env file to match your local MySQL and RabbitMQ settings:
 ```bash
 API_PORT=8080
